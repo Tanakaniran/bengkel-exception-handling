@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 # ============================================================================
 # SISTEM MANAJEMEN BENGKEL - DENGAN EXCEPTION HANDLING
 # ============================================================================
@@ -23,6 +24,7 @@
 #               ├── BisnisRuleError
 #               └── LayananError
 # ============================================================================
+
 
 class BengkelException(Exception):
     """
@@ -100,35 +102,36 @@ class Pelanggan:
         return self._is_member
 
 
-class Kendaraan:
-    """Kelas dasar untuk semua jenis kendaraan."""
+class Kendaraan(ABC):
+    """
+    Kelas dasar (Abstract Base Class) untuk semua jenis kendaraan.
+    """
     def __init__(self, plat_nomor, merk):
-        self.plat_nomor = plat_nomor  # Memanggil setter
+        self.plat_nomor = plat_nomor
         self._merk = merk
-
     @property
     def plat_nomor(self):
         return self._plat_nomor
-
     @plat_nomor.setter
     def plat_nomor(self, nilai):
-        # VALIDASI: Format plat nomor minimal 4 karakter (ATURAN BISNIS 3)
         if not isinstance(nilai, str) or len(nilai.strip()) < 4:
             raise DataTidakValidError(
                 "plat_nomor",
                 "Plat nomor harus minimal 4 karakter (contoh: DK 1234 AB)"
             )
         self._plat_nomor = nilai
-
     def info_kendaraan(self):
         return f"{self._merk} ({self._plat_nomor})"
-
     def __eq__(self, other):
-        """Dunder method: membandingkan 2 kendaraan berdasarkan plat nomor."""
         if isinstance(other, Kendaraan):
             return self._plat_nomor == other._plat_nomor
         return False
-
+    @abstractmethod
+    def hitung_tarif_dasar(self):
+        """
+        Method abstrak yang WAJIB di-override oleh subclass (Motor, Mobil).
+        """
+        raise NotImplementedError("Subclass Kendaraan wajib mengimplementasikan method hitung_tarif_dasar()")
 
 class Motor(Kendaraan):
     """Kelas Motor (turunan dari Kendaraan)."""
