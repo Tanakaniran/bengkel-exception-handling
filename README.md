@@ -126,12 +126,6 @@ classDiagram
     WorkOrder ..> LayananError : raises
 ```
 
-## Cara Menjalankan
-
-```bash
-python main.py
-```
-
 ## Contoh Output
 
 Program akan menjalankan 8 skenario yang mendemonstrasikan:
